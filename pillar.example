@@ -75,11 +75,11 @@ packages:
 
   snaps:
     wanted:
-      hello-world:
+      hello-world: {}
       hello-world-from-channel:
         channel: 1.0/stable
     classic:
-      test-snapd-hello-classic:
+      test-snapd-hello-classic: {}
     unwanted:
       - goodbye-world
 
