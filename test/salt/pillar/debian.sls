@@ -66,7 +66,8 @@ packages:
 
   snaps:
     wanted:
-      hello-world: {}
+      hello-world:
+        channel: 1.0/stable
     classic:
       test-snapd-hello-classic: {}
     unwanted:
