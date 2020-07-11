@@ -66,9 +66,9 @@ packages:
 
   snaps:
     wanted:
-      - hello-world
+      hello-world:
     classic:
-      - test-snapd-hello-classic
+      test-snapd-hello-classic:
     unwanted:
       - bare
 

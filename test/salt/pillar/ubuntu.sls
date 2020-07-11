@@ -62,9 +62,9 @@ packages:
   # https://github.com/saltstack-formulas/packages-formula/issues/44
   # snaps:
   #   wanted:
-  #     - hello-world
+  #     hello-world:
   #   classic:
-  #     - test-snapd-hello-classic
+  #     test-snapd-hello-classic:
   #   unwanted:
   #     - goodbye-world
   archives:

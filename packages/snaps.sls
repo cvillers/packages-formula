@@ -12,6 +12,14 @@
 {% set classic_snaps = packages.snaps.classic %}
 {% set unwanted_snaps = packages.snaps.unwanted %}
 
+# Backwards compatibility: if a list was provided, transform it to a dict
+{% if wanted_snaps is not mapping %}
+{% set wanted_snaps = dict.fromkeys(wanted_snaps, {}) %}
+{% endif %}
+{% if classic_snaps is not mapping %}
+{% set classic_snaps = dict.fromkeys(classic_snaps, {}) %}
+{% endif %}
+
 {%- if packages.snaps.packages %}
   {% if wanted_snaps or classic_snaps or unwanted_snaps %}
 
@@ -64,10 +72,14 @@ packages-{{ snap }}-service:
 {% endfor %}
 
 ### SNAPS to install
-{% for snap in wanted_snaps %}
+{% for snap, options in wanted_snaps.items() %}
 packages-snapd-{{ snap }}-wanted:
   cmd.run:
+  {% if "channel" in options %}
+    - name: snap install {{ snap }} --channel={{ options.channel }}
+  {% else %}
     - name: snap install {{ snap }}
+  {% endif %}
     - unless: snap list {{ snap }}
     - output_loglevel: quiet
     - require:
@@ -77,10 +89,14 @@ packages-snapd-{{ snap }}-wanted:
 {% endfor %}
 
 ### SNAPS to install in classic mode
-{% for snap in classic_snaps %}
+{% for snap, options in classic_snaps.items() %}
 packages-snapd-{{ snap }}-classic:
   cmd.run:
+  {% if "channel" in options %}
+    - name: snap install --classic {{ snap }} --channel={{ options.channel }}
+  {% else %}
     - name: snap install --classic {{ snap }}
+  {% endif %}
     - unless: snap list {{ snap }}
     - output_loglevel: quiet
     - require:
@@ -88,6 +104,7 @@ packages-snapd-{{ snap }}-classic:
       - pkg: unwanted_pkgs
     - retry: {{ packages.retry_options|json }}
 {% endfor %}
+
 
 ### SNAPS to uninstall
 {% for snap in unwanted_snaps %}
