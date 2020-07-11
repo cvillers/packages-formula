@@ -73,10 +73,11 @@ packages-{{ snap }}-service:
 
 ### SNAPS to install
 {% for snap, options in wanted_snaps.items() %}
+{% set _opts = options|default({}) %}
 packages-snapd-{{ snap }}-wanted:
   cmd.run:
-  {% if "channel" in options %}
-    - name: snap install {{ snap }} --channel={{ options.channel }}
+  {% if "channel" in _opts %}
+    - name: snap install {{ snap }} --channel={{ _opts["channel"] }}
   {% else %}
     - name: snap install {{ snap }}
   {% endif %}
@@ -90,10 +91,11 @@ packages-snapd-{{ snap }}-wanted:
 
 ### SNAPS to install in classic mode
 {% for snap, options in classic_snaps.items() %}
+{% set _opts = options|default({}) %}
 packages-snapd-{{ snap }}-classic:
   cmd.run:
-  {% if "channel" in options %}
-    - name: snap install --classic {{ snap }} --channel={{ options.channel }}
+  {% if "channel" in _opts %}
+    - name: snap install --classic {{ snap }} --channel={{ _opts["channel"] }}
   {% else %}
     - name: snap install --classic {{ snap }}
   {% endif %}
